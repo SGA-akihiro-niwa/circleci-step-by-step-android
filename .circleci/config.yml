@@ -9,7 +9,7 @@ jobs:
       - run: echo $CIRCLE_JOB
       - run:
           name: Single command - echo
-         command: echo $CIRCLE_USERNAME
+          command: echo $CIRCLE_USERNAME
       - run:
           name: Multi-line commands - echo & echo
           command: |
