@@ -1,12 +1,37 @@
+Skip to content
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@SGA-akihiro-niwa 
+Learn Git and GitHub without any code!
+Using the Hello World guide, you’ll start a branch, write comments, and open a pull request.
+
+
+0
+024SGA-akihiro-niwa/circleci-step-by-step-android
+forked from kurumai/circleci-step-by-step-android
+ Code Pull requests 0 Projects 0 Wiki Security Insights Settings
+circleci-step-by-step-android/.circleci/config.yml
+@kurumai kurumai step4 workflows
+a12ba77 20 hours ago
+@kurumai@tiembo
+106 lines (97 sloc)  3.23 KB
+  
 version: 2.1
 
 jobs:
-  build:
+  api-28:
     docker:
       - image: circleci/android:api-28
+    resource_class: xlarge
     environment:
       JAVA_TOOL_OPTIONS: "-Xmx1024m"
       GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=8"
+
       TERM: dumb
     steps:
       - checkout
@@ -28,3 +53,88 @@ jobs:
           destination: reports
       - store_test_results:
           path: app/build/test-results
+
+  api-27:
+    docker:
+      - image: circleci/android:api-27
+    resource_class: xlarge
+    environment:
+      JAVA_TOOL_OPTIONS: "-Xmx1024m"
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=8"
+
+      TERM: dumb
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ .Branch }}-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - run:
+          name: Download Dependencies
+          command: ./gradlew dependencies
+      - save_cache:
+          key: jars-{{ .Branch }}-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+          paths:
+            - ~/.gradle/caches
+            - ~/.gradle/wrapper
+      - run:
+          name: Run JVM Tests & Lint
+          command: ./gradlew check
+      - store_artifacts:
+          path: app/build/reports
+          destination: reports
+      - store_test_results:
+          path: app/build/test-results
+
+  api-26:
+    docker:
+      - image: circleci/android:api-26
+    resource_class: xlarge
+    environment:
+      JAVA_TOOL_OPTIONS: "-Xmx1024m"
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=8"
+
+      TERM: dumb
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ .Branch }}-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - run:
+          name: Download Dependencies
+          command: ./gradlew dependencies
+      - save_cache:
+          key: jars-{{ .Branch }}-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+          paths:
+            - ~/.gradle/caches
+            - ~/.gradle/wrapper
+      - run:
+          name: Run JVM Tests & Lint
+          command: ./gradlew check
+      - store_artifacts:
+          path: app/build/reports
+          destination: reports
+      - store_test_results:
+          path: app/build/test-results
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - "api-26"
+      - "api-27":
+          requires:
+            - "api-26"
+      - "api-28":
+          requires:
+            - "api-26"
+
+© 2019 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Help
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
