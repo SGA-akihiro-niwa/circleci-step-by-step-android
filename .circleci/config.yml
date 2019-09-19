@@ -1,26 +1,3 @@
-Skip to content
-Search or jump to…
-
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@SGA-akihiro-niwa 
-Learn Git and GitHub without any code!
-Using the Hello World guide, you’ll start a branch, write comments, and open a pull request.
-
-
-0
-024SGA-akihiro-niwa/circleci-step-by-step-android
-forked from kurumai/circleci-step-by-step-android
- Code Pull requests 0 Projects 0 Wiki Security Insights Settings
-circleci-step-by-step-android/.circleci/config.yml
-@kurumai kurumai step4 workflows
-a12ba77 20 hours ago
-@kurumai@tiembo
-106 lines (97 sloc)  3.23 KB
-  
 version: 2.1
 
 jobs:
@@ -125,16 +102,3 @@ workflows:
       - "api-28":
           requires:
             - "api-26"
-
-© 2019 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Help
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
