@@ -4,14 +4,21 @@ jobs:
   build:
     docker:
       - image: circleci/android:api-28
+    environment:
+      JAVA_TOOL_OPTIONS: "-Xmx1024m"
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=8"
+      TERM: dumb
     steps:
       - checkout
-      - run: echo $CIRCLE_JOB
       - run:
-          name: Single command - echo
-          command: echo $CIRCLE_USERNAME
+          name: Download Dependencies
+          command: ./gradlew dependencies
       - run:
-          name: Multi-line commands - echo & echo
-          command: |
-            echo $CIRCLE_REPOSITORY_URL
-            echo $CIRCLE_BRANCH
+          name: Run JVM Tests & Lint
+          command: ./gradlew check
+      - store_artifacts:
+          path: app/build/reports
+          destination: reports
+      - store_test_results:
+          path: app/build/test-results
+          
