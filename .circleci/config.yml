@@ -7,6 +7,7 @@ jobs:
     steps:
       - checkout
       - run: echo $CIRCLE_JOB
+      - run:
         name: Single command - echo
         command: echo $CIRCLE_USERNAME
       - run:
